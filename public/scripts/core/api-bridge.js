@@ -94,12 +94,12 @@ document.addEventListener('DOMContentLoaded', () => {
           // Store doctor name from account if set
           const account = JSON.parse(localStorage.getItem('jivak-doctor-account-v1') || '{}');
           if (!account.name) {
-            localStorage.setItem('jivak-doctor-account-v1', JSON.stringify({ name: 'Disha Shelke', passwordHash: '' }));
+            localStorage.setItem('jivak-doctor-account-v1', JSON.stringify({ name: 'Doctor', passwordHash: '' }));
           }
           document.querySelector('.auth-gate')?.remove();
           document.documentElement.classList.remove('auth-pending');
           const nameEl = document.querySelector('#doctorName');
-          if (nameEl) nameEl.textContent = account.name || 'Disha Shelke';
+          if (nameEl) nameEl.textContent = account.name || 'Doctor';
           // Trigger dashboard render
           window.dispatchEvent(new HashChangeEvent('hashchange'));
         } else {

@@ -11,6 +11,7 @@ let db;
 
 // Save DB to disk
 function save() {
+  if (!db) return;
   const data = db.export();
   fs.writeFileSync(DB_PATH, Buffer.from(data));
 }
@@ -27,7 +28,6 @@ function saveDb() { save(); }
 
 async function initDb() {
   const SQL = await initSqlJs();
-
   if (fs.existsSync(DB_PATH)) {
     const fileBuffer = fs.readFileSync(DB_PATH);
     db = new SQL.Database(fileBuffer);
@@ -37,10 +37,7 @@ async function initDb() {
     console.log('New database created at:', DB_PATH);
   }
 
-  // SQLite has foreign keys OFF by default. Without this, every
-  // "ON DELETE CASCADE" in the schema below is silently ignored —
-  // deleting a patient would leave their visits/prescriptions/expenses
-  // behind as orphaned rows instead of cleaning them up.
+  // SQLite has foreign keys OFF by default.
   db.run('PRAGMA foreign_keys = ON;');
 
   // Create tables
@@ -93,8 +90,6 @@ async function initDb() {
       visit_seq INTEGER,
       created_at TEXT DEFAULT (datetime('now','localtime'))
     );
-    -- Add vitals columns if they don't exist (for existing DBs)
-    CREATE TABLE IF NOT EXISTS _dummy_vitals_check (x);
 
     CREATE TABLE IF NOT EXISTS prescription_items (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -132,8 +127,6 @@ async function initDb() {
       created_at TEXT DEFAULT (datetime('now','localtime'))
     );
 
-    -- A child registers once and keeps coming back monthly until ~5-6 years old.
-    -- One profile per child; every monthly visit is a "dose" linked to that profile.
     CREATE TABLE IF NOT EXISTS sp_children (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
@@ -191,7 +184,6 @@ async function initDb() {
     CREATE INDEX IF NOT EXISTS idx_sp_phone  ON suvarnaprashan(phone);
     CREATE INDEX IF NOT EXISTS idx_pk_status ON pk_courses(status);
     CREATE INDEX IF NOT EXISTS idx_pk_days   ON pk_days(course_id);
-
     CREATE INDEX IF NOT EXISTS idx_patients_phone ON patients(phone);
     CREATE INDEX IF NOT EXISTS idx_patients_name  ON patients(name);
     CREATE INDEX IF NOT EXISTS idx_visits_patient ON visits(patient_id);
@@ -200,12 +192,11 @@ async function initDb() {
     CREATE INDEX IF NOT EXISTS idx_expenses_date  ON expenses(expense_date);
   `);
 
-  // Add vitals columns to existing databases (safe — ignored if already exist)
+  // Safe ALTER TABLE migrations for existing DBs
   try { db.run('ALTER TABLE visits ADD COLUMN bp TEXT'); } catch {}
   try { db.run('ALTER TABLE visits ADD COLUMN bsl TEXT'); } catch {}
   try { db.run('ALTER TABLE visits ADD COLUMN temp TEXT'); } catch {}
   try { db.run('ALTER TABLE visits ADD COLUMN weight TEXT'); } catch {}
-  // Preserve the price charged and link generated finance rows for existing databases.
   try { db.run('ALTER TABLE prescription_items ADD COLUMN selling_price REAL DEFAULT 0'); } catch {}
   try { db.run('ALTER TABLE prescription_items ADD COLUMN line_total REAL DEFAULT 0'); } catch {}
   try { db.run('ALTER TABLE prescription_items ADD COLUMN quantity_returned INTEGER DEFAULT 0'); } catch {}
@@ -214,22 +205,11 @@ async function initDb() {
   try { db.run('ALTER TABLE patients ADD COLUMN mrd_number TEXT'); } catch {}
   try { db.run('ALTER TABLE visits ADD COLUMN mrd_number TEXT'); } catch {}
   try { db.run('ALTER TABLE visits ADD COLUMN visit_seq INTEGER'); } catch {}
-
-  // An older version of this schema put a UNIQUE constraint on
-  // visits.mrd_number, back when MRD was (incorrectly) generated fresh per
-  // visit. Now MRD lives on the patient and is copied onto each of their
-  // visits, so the same value legitimately repeats across many visit rows —
-  // drop that old constraint so it doesn't reject repeat visits.
   try { db.run('DROP INDEX IF EXISTS idx_visits_mrd'); } catch {}
 
   all('SELECT id FROM patients WHERE patient_code IS NULL OR patient_code=""').forEach(p =>
     db.run('UPDATE patients SET patient_code=? WHERE id=?', [`JIV-${String(p.id).padStart(6, '0')}`, p.id]));
 
-  // MRD: assigned once to a patient, the first time they have a visit —
-  // formatted with that first visit's year-month and a sequence number
-  // among patients first seen that same month — then reused, unchanged, on
-  // every visit after that. Never assigned to a patient who has never
-  // actually come in for a consultation.
   const mrdMonthCounters = {};
   all(`SELECT p.id, MIN(v.visit_date) as first_visit FROM patients p JOIN visits v ON v.patient_id=p.id
        WHERE p.mrd_number IS NULL OR p.mrd_number=''
@@ -239,14 +219,10 @@ async function initDb() {
     const mrd = `MRD-${month}-${String(mrdMonthCounters[month]).padStart(4, '0')}`;
     db.run('UPDATE patients SET mrd_number=? WHERE id=?', [mrd, p.id]);
   });
-  // Make sure every visit's mrd_number matches its patient's permanent one
-  // (repairs any older data where MRD was still being generated per-visit).
+
   all(`SELECT v.id, p.mrd_number FROM visits v JOIN patients p ON v.patient_id=p.id WHERE p.mrd_number IS NOT NULL`)
     .forEach(v => db.run('UPDATE visits SET mrd_number=? WHERE id=?', [v.mrd_number, v.id]));
 
-  // visit_seq: this visit's place in the queue for the calendar month it
-  // falls in — 1, 2, 3... shared across every patient, resetting to 1 at
-  // the start of each new month. Backfilled here in chronological order.
   const bySeqMonth = {};
   all('SELECT id, visit_date FROM visits WHERE visit_seq IS NULL ORDER BY visit_date ASC, id ASC').forEach(v => {
     const month = String(v.visit_date || '').slice(0, 7) || 'unknown';
@@ -257,14 +233,11 @@ async function initDb() {
   db.run('CREATE UNIQUE INDEX IF NOT EXISTS idx_patients_code ON patients(patient_code)');
   db.run('CREATE UNIQUE INDEX IF NOT EXISTS idx_patients_mrd ON patients(mrd_number) WHERE mrd_number IS NOT NULL');
 
-  // One-time migration: fold old flat suvarnaprashan rows (one row per visit,
-  // no link between a kid's repeat visits) into sp_children + sp_doses
-  // (one profile per kid, doses linked to it). Old table is kept untouched
-  // as an archival backup; this only runs while sp_children is still empty.
+  // One-time legacy migration from suvarnaprashan to sp_children/sp_doses
   const spChildCount = get('SELECT COUNT(*) as c FROM sp_children');
   if (spChildCount && spChildCount.c === 0) {
     const legacyRows = all('SELECT * FROM suvarnaprashan ORDER BY visit_date ASC');
-    const childByKey = new Map(); // key: phone|lower(name) -> child id
+    const childByKey = new Map();
     legacyRows.forEach((row, i) => {
       const key = `${String(row.phone || '').trim()}|${String(row.child_name || '').trim().toLowerCase()}`;
       let childId = childByKey.get(key);
@@ -286,13 +259,8 @@ async function initDb() {
   console.log('Database ready.');
 }
 
-// Helper: run a query that modifies data (INSERT/UPDATE/DELETE)
-// sql.js resets last_insert_rowid() to 0 as a side effect of db.export()
-// (which save() calls on every write). Since save() used to run right
-// after every db.run(), any code doing INSERT -> lastId() immediately
-// afterward was silently getting 0/null — capture the real id here,
-// before save() has a chance to wipe it out.
 let lastInsertRowId = null;
+
 function run(sql, params = []) {
   db.run(sql, params);
   try {
@@ -300,12 +268,11 @@ function run(sql, params = []) {
     stmt.step();
     lastInsertRowId = stmt.getAsObject().id;
     stmt.free();
-  } catch { /* non-insert statements (CREATE, PRAGMA, etc.) — ignore */ }
+  } catch {}
   save();
   return db;
 }
 
-// Helper: get a single row
 function get(sql, params = []) {
   const stmt = db.prepare(sql);
   stmt.bind(params);
@@ -318,7 +285,6 @@ function get(sql, params = []) {
   return null;
 }
 
-// Helper: get all rows
 function all(sql, params = []) {
   const stmt = db.prepare(sql);
   stmt.bind(params);
@@ -328,7 +294,6 @@ function all(sql, params = []) {
   return rows;
 }
 
-// Helper: get last inserted row id
 function lastId() {
   return lastInsertRowId;
 }

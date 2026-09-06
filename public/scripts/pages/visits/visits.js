@@ -117,16 +117,6 @@
     $('#visitDialog').showModal();
   }
 
-  function show(view) {
-    const isVisits = view === 'visits';
-    $('#patientsView').hidden = isVisits;
-    $('#visitsView').hidden   = !isVisits;
-    document.querySelectorAll('[data-view]').forEach(x => x.classList.toggle('active', x.dataset.view===view));
-    $('#pageEyebrow').textContent = '';
-    $('#pageTitle').textContent   = isVisits ? 'Visits & prescriptions' : 'Patient management';
-    if (isVisits) renderVisits();
-  }
-
   const RX_FACILITIES  = ['आमवात','सायटिका','संधीवात','मुळव्याध','मुतखडा','बद्धकोष्ठता','शितपित्त','आम्लपित्त','जुनाट सर्दी व खोकला','निद्रानाश','थायरॉईडचे विकार','मासीक पाळीचे आजार','PCOD','त्वचाविकार','दमा, बालदमा','सौंदर्य','उच्चरक्तदाब'];
   const RX_HIGHLIGHTS  = ['सर्व सुविधायुक्त पंचकर्म सेंटर','लहान मुलांसाठी पुष्य नक्षत्रावर सुवर्ण प्राशन','महिलांसाठी स्वतंत्र व्यवस्था','इतर सर्व व्याधीवर शास्त्रोक्त आयुर्वेदिक चिकित्सालय'];
 
@@ -375,19 +365,12 @@
     if (id) prescription(visits.find(v => v.id===id));
   };
 
-  document.querySelectorAll('[data-view]').forEach(a => a.addEventListener('click', e => {
-    e.preventDefault();
-    location.hash = `#${a.dataset.view}`;
-    show(a.dataset.view);
-  }));
-
   $('#profileDialog').addEventListener('toggle', () => { if($('#profileDialog').open) addHistoryToProfile(); });
   window.addEventListener('jivak:open-prescription', e => {
     const visit = visits.find(v => String(v.id) === String(e.detail.visitId));
     if (visit) prescription(visit);
     else alert('This prescription is still loading. Please close the profile and try again.');
   });
-  window.addEventListener('hashchange', () => show(location.hash==='#visits'?'visits':'patients'));
   window.addEventListener('jivak:visit-saved', () => {
     if (location.hash === '#visits') {
       visits = loadVisits();
@@ -396,6 +379,11 @@
     window.JivakInventory?.refresh?.();
     window.JivakFinance?.reload?.();
   });
-  show(location.hash==='#visits'?'visits':'patients');
+
+  // Data loads once here regardless of which page is currently shown (so
+  // it's ready the moment the user navigates to Visits); the global router
+  // in dashboard.js owns actually showing/hiding this view and calls back
+  // in here to refresh the table whenever it switches to it.
+  window.JivakVisits = { render: renderVisits };
   renderVisits();
 })();

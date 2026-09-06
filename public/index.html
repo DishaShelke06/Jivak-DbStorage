@@ -36,7 +36,7 @@
     </a>
     <nav aria-label="Main navigation">
       <a class="nav-item" data-view="dashboard"       href="#dashboard">     <span>🏠</span> Dashboard</a>
-      <a class="nav-item active" data-view="patients" href="#patients">    <span>👥</span> Patients</a>
+      <a class="nav-item" data-view="patients" href="#patients">    <span>👥</span> Patients</a>
       <a class="nav-item" data-view="visits"          href="#visits">      <span>📋</span> Visits</a>
       <a class="nav-item" data-view="inventory"       href="#inventory">   <span>💊</span> Medicine inventory</a>
       <a class="nav-item" data-view="followups"       href="#followups">   <span>🔔</span> Follow-ups</a>
@@ -52,7 +52,7 @@
     <header class="topbar">
       <div>
         <p class="eyebrow" id="pageEyebrow"></p>
-        <h1 id="pageTitle">Patient management</h1>
+        <h1 id="pageTitle"></h1>
       </div>
       <div class="account-area">
         <div class="date"><span>◷</span><span id="today"></span></div>
@@ -61,41 +61,6 @@
       </div>
     </header>
 
-    <!-- ══ PATIENTS ══ -->
-    <div id="patientsView">
-      <section class="toolbar" id="patients">
-        <label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search by patient name or phone number" autocomplete="off" /></label>
-        <select id="genderFilter" aria-label="Filter patients by gender">
-          <option value="">All patients</option>
-          <option>Female</option><option>Male</option><option>Other</option>
-        </select>
-        <button class="primary" id="addPatientBtn"><span>＋</span> Add new patient</button>
-      </section>
-      <section class="summary" aria-label="Patient summary">
-        <div><span id="patientCount">0</span><p>Total patients</p></div>
-        <div><span id="newThisMonth">0</span><p>Added this month</p></div>
-        <div><span id="recentCount">0</span><p>Recently updated</p></div>
-      </section>
-      <section class="patient-section">
-        <div class="section-heading">
-          <div><h2>Your patients</h2><p id="resultsText">No patients have been added yet.</p></div>
-          <button class="text-button" id="clearFiltersBtn" hidden>Clear filters</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Patient</th><th>Contact</th><th>Age / Gender</th><th>Blood group</th><th>Last updated</th><th><span class="sr-only">Actions</span></th></tr></thead>
-            <tbody id="patientTableBody"></tbody>
-          </table>
-          <div class="empty-state" id="emptyState">
-            <div class="empty-icon">♡</div>
-            <h3>Start your digital patient register</h3>
-            <p>Add your first patient to securely keep their details and history in one place.</p>
-            <button class="primary" id="emptyAddBtn">Add first patient</button>
-          </div>
-        </div>
-      </section>
-    </div>
-
     <!-- ══ DASHBOARD ══ -->
     <section class="dashboard-view" id="dashboardView" hidden>
       <div class="dashboard-welcome">
@@ -103,7 +68,7 @@
           <img class="dashboard-logo" src="assets/jivak-logo.png" alt="Jivak Chikitsalay logo">
           <div>
             <p class="eyebrow">Clinic overview</p>
-            <h2 id="dashboardGreeting">Good day, Doctor</h2>
+            <h2 id="dashboardGreeting"></h2>
             <p>Here is what needs your attention today.</p>
           </div>
         </div>
@@ -158,6 +123,41 @@
       </section>
     </section>
 
+    <!-- ══ PATIENTS ══ -->
+    <div id="patientsView" hidden>
+      <section class="toolbar" id="patients">
+        <label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search by patient name or phone number" autocomplete="off" /></label>
+        <select id="genderFilter" aria-label="Filter patients by gender">
+          <option value="">All patients</option>
+          <option>Female</option><option>Male</option><option>Other</option>
+        </select>
+        <button class="primary" id="addPatientBtn"><span>＋</span> Add new patient</button>
+      </section>
+      <section class="summary" aria-label="Patient summary">
+        <div><span id="patientCount">0</span><p>Total patients</p></div>
+        <div><span id="newThisMonth">0</span><p>Added this month</p></div>
+        <div><span id="recentCount">0</span><p>Recently updated</p></div>
+      </section>
+      <section class="patient-section">
+        <div class="section-heading">
+          <div><h2>Your patients</h2><p id="resultsText">No patients have been added yet.</p></div>
+          <button class="text-button" id="clearFiltersBtn" hidden>Clear filters</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Patient</th><th>Contact</th><th>Age / Gender</th><th>Blood group</th><th>Last updated</th><th><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="patientTableBody"></tbody>
+          </table>
+          <div class="empty-state" id="emptyState" hidden>
+            <div class="empty-icon">♡</div>
+            <h3>Start your digital patient register</h3>
+            <p>Add your first patient to securely keep their details and history in one place.</p>
+            <button class="primary" id="emptyAddBtn">Add first patient</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
     <!-- ══ VISITS ══ -->
     <section class="visits-view" id="visitsView" hidden>
       <div class="visit-overview">
@@ -178,7 +178,7 @@
             <thead><tr><th>Date</th><th>Patient</th><th>Complaints / diagnosis</th><th>Consultation fee</th><th><span class="sr-only">Actions</span></th></tr></thead>
             <tbody id="visitTableBody"></tbody>
           </table>
-          <div class="empty-state" id="visitEmptyState">
+          <div class="empty-state" id="visitEmptyState" hidden>
             <div class="empty-icon">✦</div>
             <h3>Record the first consultation</h3>
             <p>Select a patient and capture their symptoms, diagnosis, treatment, and consultation fee.</p>
@@ -213,7 +213,7 @@
             <thead><tr><th>Medicine</th><th>Category</th><th>In stock</th><th>Expiry</th><th>Purchase / selling price</th><th><span class="sr-only">Actions</span></th></tr></thead>
             <tbody id="medicineTableBody"></tbody>
           </table>
-          <div class="empty-state" id="medicineEmptyState">
+          <div class="empty-state" id="medicineEmptyState" hidden>
             <div class="empty-icon">✚</div>
             <h3>Build your medicine inventory</h3>
             <p>Add the medicines currently available in your clinic to enable stock alerts and automatic deduction.</p>
@@ -242,7 +242,7 @@
             <thead><tr><th>Patient</th><th>Last visit</th><th>Reminder date</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead>
             <tbody id="followupTableBody"></tbody>
           </table>
-          <div class="empty-state" id="followupEmptyState">
+          <div class="empty-state" id="followupEmptyState" hidden>
             <div class="empty-icon">◴</div>
             <h3>No follow-ups planned</h3>
             <p>Choose a past consultation below to schedule a patient reminder.</p>
@@ -301,7 +301,7 @@
             <thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Category</th><th>Amount</th><th><span class="sr-only">Actions</span></th></tr></thead>
             <tbody id="financeTableBody"></tbody>
           </table>
-          <div class="empty-state" id="financeEmptyState">
+          <div class="empty-state" id="financeEmptyState" hidden>
             <div class="empty-icon">₹</div>
             <h3>Finance tracking starts here</h3>
             <p>Consultation fees are recorded automatically; add other income and expenses as they occur.</p>
@@ -725,12 +725,12 @@
 <script src="scripts/core/api-bridge.js"></script>
 <script src="scripts/core/auth.js"></script>
 <script src="scripts/pages/patients/patients.js"></script>
-<script src="scripts/pages/visits/visits.js"></script>
+<script src="scripts/pages/visits/visits.js?v=2"></script>
 <script src="scripts/pages/inventory/inventory.js"></script>
 <script src="scripts/pages/followups/followups.js"></script>
 <script src="scripts/pages/finance/finance.js"></script>
 <script src="scripts/pages/finance/finance-sales.js"></script>
-<script src="scripts/pages/dashboard/dashboard.js"></script>
+<script src="scripts/pages/dashboard/dashboard.js?v=2"></script>
 <script src="scripts/pages/finance/income-breakdown.js"></script>
 <script src="scripts/pages/suvarnaprashan/suvarnaprashan.js"></script>
 <script src="scripts/pages/panchakarma/panchakarma.js"></script>

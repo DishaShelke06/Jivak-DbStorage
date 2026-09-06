@@ -169,6 +169,7 @@
     font-family: inherit;
     background: var(--white);
     color: var(--ink);
+    cursor: pointer;
 }
 
 #suvarnaprashanView #spStatusFilter {

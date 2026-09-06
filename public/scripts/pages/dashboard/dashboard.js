@@ -67,6 +67,7 @@
     $('#pageTitle').textContent   = labels[view] || '';
 
     if (view === 'dashboard')   loadDashboard();
+    if (view === 'visits')      window.JivakVisits?.render?.();
     if (view === 'followups')   window.JivakFollowups?.render?.();
     if (view === 'finance')     window.JivakFinance?.reload?.();
     if (view === 'inventory')   window.JivakInventory?.refresh?.();
