@@ -1,0 +1,87 @@
+@media (min-width:801px) {
+    .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: 244px;
+        z-index: 10;
+        overflow-y: auto
+    }
+    .app-shell {
+        grid-template-columns: 244px 1fr
+    }
+    .app-shell main {
+        grid-column: 2
+    }
+}
+
+.dashboard-title {
+    display: flex;
+    align-items: center;
+    gap: 14px
+}
+
+.dashboard-logo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #a8c4a5;
+    background: #fff;
+    box-shadow: 0 3px 10px #244a3b18
+}
+
+.auth-logo {
+    width: 108px;
+    height: 108px
+}
+
+.topbar {
+    padding-bottom: 5px
+}
+
+.table-wrap {
+    box-shadow: 0 3px 12px #244a3b08
+}
+
+.summary {
+    box-shadow: inset 0 1px #ffffff7d
+}
+
+.toolbar .primary {
+    white-space: nowrap
+}
+
+.backup-actions .secondary,
+.backup-actions .primary {
+    padding: 10px 12px
+}
+
+@media(max-width:800px) {
+    .dashboard-logo {
+        width: 48px;
+        height: 48px
+    }
+    .sidebar {
+        position: static
+    }
+    .app-shell main {
+        grid-column: auto
+    }
+}
+
+@media(max-width:500px) {
+    .dashboard-title {
+        gap: 9px
+    }
+    .dashboard-logo {
+        width: 41px;
+        height: 41px
+    }
+    .backup-actions {
+        gap: 6px
+    }
+    .backup-actions button {
+        font-size: 11px;
+        padding: 9px
+    }
+}

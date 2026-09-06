@@ -1,0 +1,252 @@
+/* ── Panchakarma Module Styles ── */
+
+/* Course view (day tracking) */
+#pkCourseView {
+  background: var(--white);
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.pk-course-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.pk-course-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.pk-course-header p {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.pk-course-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Day rows */
+.pk-day-row {
+  display: grid;
+  grid-template-columns: 60px 1fr auto auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.pk-day-row:last-child { border-bottom: none; }
+
+.pk-day-row.pk-day-done {
+  background: #f6fdf7;
+  border-radius: 8px;
+  padding: 12px 10px;
+  margin-bottom: 4px;
+  border-bottom: none;
+}
+
+.pk-day-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--brand);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pk-day-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pk-day-info strong { font-size: 14px; color: var(--ink); }
+.pk-day-info span   { font-size: 13px; color: var(--muted); }
+
+.pk-day-payment {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* Add day form */
+.pk-add-day-form {
+  background: #f8faf8;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 18px;
+  margin-top: 20px;
+}
+
+.pk-add-day-form h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.pk-form-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.pk-form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.pk-form-row .field,
+.pk-form-row-2 .field { margin: 0; }
+
+/* Therapy checkboxes in dialog */
+#pkTherapyCheckboxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.pk-therapy-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+  padding: 6px 10px;
+  border: 1.5px solid var(--line);
+  border-radius: 7px;
+  transition: all 0.15s;
+}
+
+.pk-therapy-check:hover { border-color: var(--brand); background: #f0f7f0; }
+.pk-therapy-check input[type=checkbox] { accent-color: var(--brand); width: 15px; height: 15px; }
+
+/* Patient autocomplete in dialog */
+#pkPatientDropdown {
+  position: absolute;
+  z-index: 200;
+  width: 100%;
+  background: var(--white);
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-top: 2px;
+}
+
+.pk-patient-field { position: relative; }
+
+/* Status badge colors already exist in app — reuse */
+
+/* Dialog wider for panchakarma */
+#pkDialog { max-width: 680px; width: 95%; }
+
+#pkDialog .form-grid {
+  grid-template-columns: 1fr 1fr;
+}
+
+.pk-therapy-section {
+  grid-column: 1 / -1;
+}
+
+.pk-therapy-section label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* ── Therapy breakdown summary ── */
+.pk-therapy-summary {
+  background: #f0f7f0;
+  border: 1.5px solid #c8e6c8;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+.pk-summary-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--brand);
+  margin-bottom: 12px;
+}
+.pk-summary-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pk-summary-card {
+  background: var(--white);
+  border: 1.5px solid #c8e6c8;
+  border-radius: 8px;
+  padding: 10px 16px;
+  min-width: 160px;
+}
+.pk-summary-therapy {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.pk-summary-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+.pk-summary-stats strong {
+  color: var(--brand);
+  font-size: 15px;
+}
+.pk-therapy-tag {
+  display: inline-block;
+  background: #e8f5e9;
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+/* ── Therapy price display ── */
+.pk-therapy-check {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 8px 12px;
+}
+.therapy-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.therapy-price {
+  font-size: 11px;
+  color: var(--brand);
+  font-weight: 600;
+}
+.pk-therapy-check:has(input:checked) .therapy-price {
+  color: white;
+}

@@ -1,0 +1,695 @@
+:root {
+    --ink: #1e2925;
+    --muted: #718078;
+    --line: #e4e9e4;
+    --cream: #f7f6f1;
+    --sage: #dce8d7;
+    --green: #2c674e;
+    --green-dark: #1f503d;
+    --white: #fff;
+    --red: #a33d35
+}
+
+* {
+    box-sizing: border-box
+}
+
+body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: "Nunito", sans-serif;
+    font-size: 14px
+}
+
+.app-shell {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 244px 1fr
+}
+
+.sidebar {
+    background: #244a3b;
+    color: #f6faf4;
+    padding: 28px 18px;
+    display: flex;
+    flex-direction: column
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: inherit;
+    text-decoration: none;
+    padding: 0 8px 40px
+}
+
+.brand-mark {
+    display: grid;
+    place-items: center;
+    width: 37px;
+    height: 37px;
+    border: 1px solid #9fb7a0;
+    border-radius: 50%;
+    font: 700 25px "Cormorant Garamond", serif;
+    color: #e6d895
+}
+
+.brand strong {
+    display: block;
+    font: 700 21px "Cormorant Garamond", serif;
+    letter-spacing: .1px
+}
+
+.brand small {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 600;
+    margin-top: 2px;
+    color: #c6d5c7
+}
+
+nav {
+    display: grid;
+    gap: 5px
+}
+
+.nav-item {
+    color: #e8f0e9;
+    text-decoration: none;
+    padding: 12px 11px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-weight: 500
+}
+
+.nav-item span {
+    font-size: 18px;
+    width: 16px;
+    text-align: center
+}
+
+.nav-item.active {
+    background: #397158;
+    color: white
+}
+
+.nav-item.muted {
+    opacity: .55;
+    cursor: default
+}
+
+.nav-item em {
+    margin-left: auto;
+    font-size: 9px;
+    font-style: normal;
+    white-space: nowrap
+}
+
+.sidebar-foot {
+    margin-top: auto;
+    border-top: 1px solid #577565;
+    padding: 18px 9px 0;
+    color: #c9d8ca;
+    font-size: 11px
+}
+
+.lock {
+    font-size: 16px;
+    vertical-align: middle;
+    margin-right: 5px
+}
+
+main {
+    min-width: 0;
+    padding: 42px 52px
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 34px
+}
+
+.eyebrow {
+    margin: 0 0 5px;
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    font-size: 10px;
+    color: var(--green);
+    font-weight: 700
+}
+
+h1,
+h2,
+h3,
+p {
+    margin-top: 0
+}
+
+h1 {
+    font: 700 32px "Cormorant Garamond", serif;
+    letter-spacing: -.5px;
+    margin-bottom: 0
+}
+
+.date {
+    color: var(--muted);
+    padding-top: 12px;
+    font-size: 13px
+}
+
+.date span:first-child {
+    color: var(--green);
+    font-size: 17px;
+    margin-right: 6px
+}
+
+.toolbar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px
+}
+
+.search {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    padding: 0 13px;
+    max-width: 480px;
+    flex: 1;
+    color: var(--muted)
+}
+
+.search span {
+    font-size: 22px;
+    line-height: 1
+}
+
+.search input {
+    font: inherit;
+    border: 0;
+    outline: 0;
+    padding: 13px 9px;
+    width: 100%;
+    background: transparent
+}
+
+select,
+input,
+textarea,
+button {
+    font: inherit
+}
+
+select {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 0 12px;
+    color: var(--ink);
+    outline-color: var(--green)
+}
+
+button {
+    cursor: pointer;
+    border: 0
+}
+
+.primary {
+    background: var(--green);
+    color: white;
+    border-radius: 7px;
+    padding: 12px 17px;
+    font-weight: 600;
+    box-shadow: 0 2px 4px #1d4d3820
+}
+
+.primary:hover {
+    background: var(--green-dark)
+}
+
+.primary span {
+    font-size: 17px;
+    vertical-align: -1px
+}
+
+.summary {
+    background: var(--sage);
+    border-radius: 8px;
+    padding: 16px 25px;
+    display: flex;
+    gap: 0;
+    margin-bottom: 38px
+}
+
+.summary div {
+    width: 180px;
+    border-right: 1px solid #b8cdb4;
+    padding-left: 18px
+}
+
+.summary div:first-child {
+    padding-left: 0
+}
+
+.summary div:last-child {
+    border: 0
+}
+
+.summary span {
+    font: 700 23px "Playfair Display", serif
+}
+
+.summary p {
+    color: #526559;
+    margin: 3px 0 0;
+    font-size: 12px
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 14px
+}
+
+.section-heading h2 {
+    font: 700 21px "Cormorant Garamond", serif;
+    margin: 0 0 4px
+}
+
+.section-heading p {
+    color: var(--muted);
+    margin: 0;
+    font-size: 13px
+}
+
+.text-button {
+    background: transparent;
+    color: var(--green);
+    font-weight: 600;
+    padding: 4px
+}
+
+.table-wrap {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse
+}
+
+th {
+    text-align: left;
+    color: #718078;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 10px;
+    padding: 15px 18px;
+    background: #fbfcfa;
+    border-bottom: 1px solid var(--line)
+}
+
+td {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line);
+    color: #52615b
+}
+
+tbody tr:last-child td {
+    border: 0
+}
+
+tbody tr {
+    cursor: pointer
+}
+
+tbody tr:hover {
+    background: #fafcf9
+}
+
+.patient-name {
+    font-weight: 600;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 3px
+}
+
+.patient-id {
+    color: #84928b;
+    font-size: 11px
+}
+
+.pill {
+    display: inline-block;
+    background: #eef4eb;
+    color: #386249;
+    padding: 4px 8px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 600
+}
+
+.row-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px
+}
+
+.link-button {
+    color: var(--green);
+    background: none;
+    font-weight: 600;
+    padding: 2px
+}
+
+.link-button.danger {
+    color: var(--red)
+}
+
+.empty-state {
+    text-align: center;
+    padding: 61px 24px
+}
+
+.empty-state[hidden] {
+    display: none
+}
+
+.empty-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--sage);
+    color: var(--green);
+    font-size: 25px;
+    margin: 0 auto 15px
+}
+
+.empty-state h3 {
+    font: 700 19px "Cormorant Garamond", serif;
+    margin-bottom: 8px
+}
+
+.empty-state p {
+    color: var(--muted);
+    max-width: 350px;
+    margin: 0 auto 20px;
+    line-height: 1.55
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0)
+}
+
+dialog {
+    border: 0;
+    border-radius: 11px;
+    padding: 0;
+    width: min(680px, calc(100% - 30px));
+    box-shadow: 0 20px 70px #14271d50
+}
+
+dialog::backdrop {
+    background: #17291f8c
+}
+
+dialog form {
+    padding: 29px
+}
+
+.modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 26px
+}
+
+.modal-head h2 {
+    font: 700 25px "Cormorant Garamond", serif;
+    margin: 0
+}
+
+.icon-button {
+    width: 31px;
+    height: 31px;
+    border-radius: 50%;
+    background: #f0f3ee;
+    color: #607169;
+    font-size: 25px;
+    line-height: 20px
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 17px
+}
+
+.field {
+    display: block;
+    font-weight: 600;
+    font-size: 12px
+}
+
+.field.full {
+    grid-column: 1/-1
+}
+
+.field span,
+.form-note span {
+    color: var(--red)
+}
+
+.field input,
+.field select,
+.field textarea {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 7px;
+    border: 1px solid #d7dfd8;
+    border-radius: 6px;
+    padding: 10px 11px;
+    outline-color: var(--green);
+    font-weight: 400;
+    background: white;
+    resize: vertical
+}
+
+.form-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 18px 0
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px
+}
+
+.secondary {
+    border: 1px solid #ccd6ce;
+    background: #fff;
+    border-radius: 7px;
+    padding: 11px 16px;
+    color: #415148;
+    font-weight: 600
+}
+
+.profile-dialog {
+    width: min(710px, calc(100% - 30px))
+}
+
+.profile-dialog article {
+    padding: 31px
+}
+
+.profile-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 22px
+}
+
+.profile-title h2 {
+    font: 700 27px "Cormorant Garamond", serif;
+    margin: 3px 0 4px
+}
+
+.profile-meta {
+    color: var(--muted);
+    font-size: 13px
+}
+
+.profile-close {
+    float: right
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line)
+}
+
+.profile-grid span,
+.notes-title {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px
+}
+
+.profile-grid strong {
+    font-size: 14px
+}
+
+.notes {
+    padding: 22px 0
+}
+
+.notes p {
+    line-height: 1.6;
+    color: #4e5e56;
+    margin: 0
+}
+
+.visit-placeholder {
+    background: #f6f8f4;
+    border-radius: 7px;
+    padding: 16px;
+    color: var(--muted);
+    font-size: 13px
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+    margin-top: 24px
+}
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 25px;
+    transform: translate(-50%, 130px);
+    opacity: 0;
+    background: #1f4939;
+    color: #fff;
+    padding: 11px 17px;
+    border-radius: 6px;
+    transition: .25s;
+    box-shadow: 0 4px 14px #14271d35;
+    font-size: 13px
+}
+
+.toast.show {
+    transform: translate(-50%, 0);
+    opacity: 1
+}
+
+@media(max-width:800px) {
+    .app-shell {
+        grid-template-columns: 1fr
+    }
+    .sidebar {
+        padding: 15px 20px
+    }
+    .brand {
+        padding: 0 0 14px
+    }
+    nav {
+        display: flex;
+        overflow: auto
+    }
+    .nav-item {
+        white-space: nowrap
+    }
+    .sidebar-foot {
+        display: none
+    }
+    main {
+        padding: 30px 20px
+    }
+    .topbar {
+        margin-bottom: 23px
+    }
+    .toolbar {
+        flex-wrap: wrap
+    }
+    .search {
+        min-width: 100%;
+        max-width: none
+    }
+    .summary {
+        margin-bottom: 27px
+    }
+    .summary div {
+        flex: 1;
+        width: auto;
+        padding-left: 12px
+    }
+    .table-wrap {
+        overflow-x: auto
+    }
+    table {
+        min-width: 690px
+    }
+}
+
+@media(max-width:500px) {
+    h1 {
+        font-size: 28px
+    }
+    .topbar {
+        display: block
+    }
+    .date {
+        padding-top: 11px
+    }
+    .summary {
+        padding: 14px
+    }
+    .summary span {
+        font-size: 20px
+    }
+    .summary p {
+        font-size: 10px
+    }
+    .form-grid {
+        grid-template-columns: 1fr
+    }
+    .field.full {
+        grid-column: auto
+    }
+    .modal-actions {
+        margin-top: 5px
+    }
+    .profile-grid {
+        grid-template-columns: 1fr 1fr
+    }
+}

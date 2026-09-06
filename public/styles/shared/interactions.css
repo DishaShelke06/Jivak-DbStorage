@@ -1,0 +1,231 @@
+/* ===== App-wide liveliness: hover states, transitions, small motion ===== */
+
+a, button, input, select, textarea {
+    transition: background-color .18s ease, color .18s ease, border-color .18s ease,
+        box-shadow .18s ease, transform .12s ease;
+}
+
+/* Sidebar nav */
+.nav-item {
+    position: relative;
+}
+
+.nav-item:not(.muted):hover {
+    background: #2f5a46;
+    color: #fff;
+    transform: translateX(2px);
+}
+
+.nav-item.active:hover {
+    background: #3f7a5f;
+}
+
+.nav-item span {
+    transition: transform .2s ease;
+}
+
+.nav-item:not(.muted):hover span {
+    transform: scale(1.15);
+}
+
+.logout:hover {
+    background: #eef4eb;
+    border-color: var(--green);
+}
+
+/* Buttons */
+.primary {
+    transition: background-color .18s ease, transform .12s ease, box-shadow .18s ease;
+}
+
+.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px #1f503d30;
+}
+
+.primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px #1d4d3820;
+}
+
+.secondary:hover {
+    border-color: var(--green);
+    color: var(--green);
+    background: #f6faf5;
+}
+
+.secondary:active,
+.primary:active {
+    filter: brightness(.97);
+}
+
+.link-button {
+    border-radius: 5px;
+    padding: 4px 6px;
+}
+
+.link-button:hover {
+    background: #eaf3e7;
+    text-decoration: none;
+}
+
+.link-button.danger:hover {
+    background: #fdeceb;
+}
+
+.icon-button:hover {
+    background: #e2e9e2;
+    transform: rotate(90deg);
+}
+
+.text-button:hover {
+    text-decoration: underline;
+}
+
+/* Table rows */
+tbody tr {
+    transition: background-color .15s ease;
+}
+
+tbody tr:hover {
+    background: #f4f8f3;
+}
+
+/* Summary + stat cards */
+.summary div {
+    transition: transform .18s ease;
+}
+
+.summary div:hover {
+    transform: translateY(-2px);
+}
+
+/* Search + inputs focus glow */
+.search {
+    transition: box-shadow .18s ease, border-color .18s ease;
+}
+
+.search:focus-within {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px #2c674e18;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    outline: none;
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px #2c674e18;
+}
+
+select:hover,
+.field input:hover,
+.field textarea:hover {
+    border-color: #b9cab8;
+}
+
+/* Empty state icon breathing */
+.empty-icon {
+    animation: floatIcon 3.2s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+/* Toast */
+.toast {
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+}
+
+/* Dialog entrance animation */
+dialog[open] {
+    animation: dialogPop .22s cubic-bezier(.2,.9,.3,1);
+}
+
+dialog[open]::backdrop {
+    animation: backdropFade .22s ease;
+}
+
+@keyframes dialogPop {
+    from { opacity: 0; transform: translateY(10px) scale(.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes backdropFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Brand mark subtle interaction already in logo.css; add nav underline flourish */
+.brand strong {
+    background: linear-gradient(90deg, #f6faf4, #cfe3cf, #f6faf4);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 6s linear infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+/* Pills and status badges pop slightly on hover within rows */
+tbody tr:hover .pill,
+tbody tr:hover .status {
+    transform: scale(1.04);
+}
+
+.pill, .status {
+    display: inline-block;
+    transition: transform .15s ease;
+}
+
+/* Finance tab underline motion */
+.finance-tab {
+    position: relative;
+}
+
+/* Card lift for table-wrap on hover of whole section (subtle) */
+.table-wrap {
+    transition: box-shadow .25s ease;
+}
+
+/* ===== Autocomplete suggestions (diagnosis + medicine name fields) ===== */
+.autocomplete-wrap {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+.autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    margin-top: 4px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+    box-shadow: 0 12px 26px #1f503d22;
+}
+
+.autocomplete-item {
+    padding: 9px 12px;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ink);
+    cursor: pointer;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.active {
+    background: #eaf3e7;
+    color: var(--green-dark);
+}

@@ -1,0 +1,826 @@
+.visits-view {
+    padding-top: 2px
+}
+
+.visit-overview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 24px
+}
+
+.visit-overview p:not(.eyebrow) {
+    margin: 0;
+    color: var(--muted)
+}
+
+.visit-summary {
+    margin-bottom: 34px
+}
+
+.visit-dialog {
+    width: min(780px, calc(100% - 30px))
+}
+
+.visit-dialog form {
+    padding: 29px
+}
+
+.medicine-block {
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    margin: 20px 0;
+    padding: 15px
+}
+
+.medicine-scroll {
+    overflow-x: auto;
+}
+
+@media (min-width: 651px) {
+    .medicine-scroll .medicine-block-header,
+    .medicine-scroll .medicine-row {
+        min-width: 606px;
+    }
+}
+
+.medicine-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 13px
+}
+
+.medicine-heading strong,
+.medicine-heading small {
+    display: block
+}
+
+.medicine-heading small {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 3px
+}
+
+.small-button {
+    font-size: 11px;
+    padding: 8px 10px
+}
+
+.medicine-scroll .medicine-row input,
+.medicine-scroll .medicine-row select {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #d7dfd8;
+    border-radius: 5px;
+    padding: 9px 6px;
+    min-width: 0;
+    font-size: 13px;
+    background: var(--white);
+}
+
+/* Browsers refuse to shrink a number input's spinner below a fixed native
+   width, which was forcing the narrow Qty column to overflow into Dosage
+   and throw off the whole row's alignment with its header. Hide it — the
+   value is still fully editable by typing. */
+.medicine-scroll .medicine-row input[type=number] {
+    -moz-appearance: textfield;
+    text-align: center;
+}
+.medicine-scroll .medicine-row input[type=number]::-webkit-outer-spin-button,
+.medicine-scroll .medicine-row input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Native <select> rendering reserves its own minimum width for the
+   dropdown arrow regardless of any CSS width we set — that's what kept
+   forcing Dosage/Duration wider than their column no matter how narrow we
+   made the grid track. Strip native rendering entirely and draw a tiny
+   custom arrow instead, so these can actually shrink down small. */
+.medicine-scroll .medicine-row select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23718078' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 5px center;
+    background-size: 11px;
+    padding-right: 18px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.remove-medicine {
+    background: transparent;
+    color: #9f5148;
+    font-size: 20px;
+    border-radius: 6px;
+    transition: background .18s ease, transform .18s ease;
+}
+
+.remove-medicine:hover {
+    background: #fdeceb;
+    transform: scale(1.1);
+}
+
+.prescription-dialog {
+    width: min(720px, calc(100% - 30px))
+}
+
+/* ===== Letterhead-style prescription, matching the clinic's printed pad ===== */
+.rx-letterhead {
+    padding: 0;
+    background: #fdfbf2;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Full-width top header: logo/title, doctor info, caduceus, address */
+.rx-topheader {
+    padding: 24px 28px 14px;
+    border-bottom: 2px solid var(--green-dark);
+}
+
+.rx-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.rx-logo {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    border: 2px solid #9fb7a0;
+    object-fit: cover;
+    background: #fff;
+    flex-shrink: 0;
+}
+
+.rx-brand-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.rx-brand-text h2 {
+    font: 700 30px "Playfair Display", serif;
+    color: var(--green-dark);
+    margin: 0 0 4px;
+    line-height: 1.1;
+}
+
+.rx-tagline {
+    color: var(--green);
+    font-size: 11.5px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.rx-header-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 14px;
+}
+
+.rx-doctor {
+    display: grid;
+    gap: 3px;
+}
+
+.rx-doctor-name {
+    margin: 0;
+    font-size: 12.5px;
+}
+
+.rx-doctor-name strong {
+    color: var(--red);
+    font-size: 14.5px;
+}
+
+.rx-doctor-name span {
+    color: #4d5d55;
+}
+
+.rx-quals {
+    margin: 0;
+    color: #7c8b83;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.rx-address {
+    display: grid;
+    gap: 2px;
+    text-align: right;
+    font-size: 11.5px;
+    color: #4d5d55;
+}
+
+/* Two columns below the header: facilities sidebar + main Rx area */
+.rx-columns {
+    display: flex;
+    align-items: stretch;
+    flex: 1;
+}
+
+.rx-sidebar {
+    width: 168px;
+    flex-shrink: 0;
+    background: #fdfbf2;
+    border-right: 2px solid var(--green-dark);
+    padding: 18px 14px;
+}
+
+.rx-sidebar h4 {
+    color: var(--red);
+    font-size: 11.5px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    border-bottom: 1px solid #e6ebe1;
+    padding-bottom: 6px;
+}
+
+.rx-facility-list,
+.rx-highlight-list {
+    list-style: none;
+    margin: 0 0 14px;
+    padding: 0;
+    display: grid;
+    gap: 5px;
+}
+
+.rx-facility-list li {
+    font-size: 10.5px;
+    color: #37493d;
+    font-weight: 600;
+}
+
+.rx-highlight-list {
+    border-top: 1px dashed #dfe6dd;
+    padding-top: 10px;
+}
+
+.rx-highlight-list li {
+    font-size: 9.5px;
+    color: #55655a;
+    line-height: 1.4;
+    padding-left: 10px;
+    position: relative;
+    margin-bottom: 6px;
+}
+
+.rx-highlight-list li::before {
+    content: "✻";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--green);
+    font-size: 9px;
+}
+
+.rx-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.rx-patient-fields {
+    padding: 16px 28px 8px;
+    display: grid;
+    gap: 12px;
+}
+
+.rx-field-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.rx-field-row-split {
+    gap: 30px;
+}
+
+.rx-field-row-split > span {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.rx-label {
+    color: #8a988f;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 9.5px;
+    letter-spacing: .4px;
+    white-space: nowrap;
+}
+
+.rx-value {
+    color: var(--ink);
+    border-bottom: 1px solid #d7dfd8;
+    min-width: 90px;
+    padding: 0 2px 2px;
+    font-size: 12.5px;
+}
+
+.rx-value-wide {
+    min-width: 320px;
+    flex: 1;
+}
+
+.rx-body {
+    position: relative;
+    flex: 1;
+}
+
+.rx-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: .07;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.rx-mark {
+    position: relative;
+    z-index: 1;
+    display: block;
+    font: 700 26px "Playfair Display", serif;
+    color: var(--red);
+    padding: 6px 28px 0;
+}
+
+.rx-mark sub {
+    font-size: 15px;
+}
+
+.rx-body .prescription-section {
+    position: relative;
+    z-index: 1;
+    padding: 12px 28px;
+    border-bottom: 1px dashed #e2e7dd;
+}
+
+.rx-body .prescription-section h3 {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+    margin-bottom: 9px;
+}
+
+.rx-letterhead .medicine-list th {
+    background: #f5f8f2;
+}
+
+.rx-fee {
+    position: relative;
+    z-index: 1;
+    padding: 12px 28px 4px;
+    font-weight: 700;
+    color: var(--green-dark);
+    font-size: 12.5px;
+}
+
+/* Full-width footer: validity note + suchana ribbon */
+.rx-footer {
+    padding: 8px 0 0;
+}
+
+.rx-footnote {
+    padding: 0 28px 10px;
+    font-size: 11px;
+    color: #8a988f;
+    font-style: italic;
+}
+
+.rx-suchana {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    background: linear-gradient(90deg, #fdfbf200, #2c674e 40%, #1f503d);
+    color: #fff;
+    padding: 10px 20px 10px 28px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.rx-leaf {
+    display: inline-grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fff;
+    font-size: 14px;
+}
+
+
+.prescription-patient {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    line-height: 1.65
+}
+
+.prescription-patient strong {
+    display: block
+}
+
+.prescription-section p {
+    line-height: 1.55;
+    margin: 0
+}
+
+.medicine-list {
+    width: 100%;
+    border-collapse: collapse
+}
+
+.medicine-list th,
+.medicine-list td {
+    padding: 8px 5px;
+    text-align: left;
+    border-bottom: 1px solid #edf0ed
+}
+
+.medicine-list tr:last-child td {
+    border: 0
+}
+
+.prescription-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+    padding: 22px 35px 30px;
+}
+
+@media(max-width:650px) {
+    .visit-overview {
+        align-items: flex-start;
+        gap: 13px
+    }
+
+    .visit-overview .primary {
+        white-space: nowrap
+    }
+
+    .medicine-scroll .medicine-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 7px
+    }
+
+    .medicine-scroll .medicine-row input:first-child {
+        grid-column: 1/-1
+    }
+
+    .remove-medicine {
+        grid-column: 2;
+        justify-self: end
+    }
+
+    .rx-columns {
+        flex-direction: column;
+    }
+
+    .rx-sidebar {
+        width: auto;
+        border-right: 0;
+        border-bottom: 2px solid var(--green-dark);
+    }
+
+    .rx-header-row {
+        grid-template-columns: 1fr;
+        text-align: left;
+        justify-items: start;
+        gap: 10px;
+    }
+
+    .rx-address {
+        text-align: left;
+    }
+
+    .rx-field-row-split {
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .rx-suchana {
+        justify-content: space-between;
+        text-align: left;
+        padding-left: 20px;
+    }
+}
+
+@media print {
+    body>*:not(#prescriptionDialog) {
+        display: none !important
+    }
+
+    #prescriptionDialog {
+        display: block !important;
+        position: static;
+        border: 0;
+        width: 100%;
+        box-shadow: none
+    }
+
+    .prescription-actions {
+        display: none !important
+    }
+}
+
+/* ── Medicine rows ──
+   Scoped under .medicine-scroll (unique to this page) rather than bare
+   .medicine-row — inventory.css defines its own unrelated .medicine-row
+   for the "add stock" form, and since it loads after this file with equal
+   specificity, it was silently winning and overriding every width here. */
+.medicine-scroll .medicine-block-header {
+  display: grid;
+  grid-template-columns: minmax(130px, 1.6fr) 40px 80px 65px 115px 104px 24px;
+  gap: 8px;
+  padding: 0 0 6px 0;
+  border-bottom: 2px solid var(--line);
+  margin-bottom: 6px;
+}
+.medicine-scroll .medicine-block-header span {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.medicine-scroll .medicine-row {
+  display: grid;
+  grid-template-columns: minmax(130px, 1.6fr) 40px 80px 65px 115px 104px 24px;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+.medicine-scroll .medicine-row:last-child { border-bottom: none; }
+
+.med-timing-group {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.med-timing-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 23px;
+  height: 23px;
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--white);
+  user-select: none;
+  transition: all 0.15s;
+  position: relative;
+  flex-shrink: 0;
+}
+.med-timing-check input[type=checkbox] {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  margin: 0;
+}
+.med-timing-check:hover { border-color: var(--brand); color: var(--brand); }
+.med-timing-check.checked {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: white;
+}
+
+/* Prescription medicine table /* Prescription medicine table */
+.medicine-list th, .medicine-list td {
+  padding: 5px 8px;
+  font-size: 12px;
+}
+
+/* ══════════════════════════════════════
+   PRESCRIPTION - LETTERHEAD OVERLAY FIX
+   ══════════════════════════════════════ */
+
+dialog.prescription-dialog {
+  width: 95vw;
+  max-width: 680px;
+  max-height: 95vh;
+  overflow-y: auto;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.rx-sheet {
+  position: relative;
+  width: 100%;
+  background: white;
+}
+
+.rx-bg {
+  width: 100%;
+  padding-top: 141.3%;
+  background-image: url('/assets/letterhead.jpg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top left;
+}
+
+.rx-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 52px);
+}
+
+/* Data fields */
+.rx-field {
+  position: absolute;
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  padding-bottom: 1px;
+}
+
+.rx-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a5c2a;
+  white-space: nowrap;
+  font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+}
+
+.rx-data {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+  font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.rx-field-underline {
+  border-bottom: 1px solid #b8c9b8;
+  padding-bottom: 4px;
+}
+
+.rx-print-symbol {
+  position: absolute;
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 700;
+  color: #1a5c2a;
+  font-family: Georgia, serif;
+}
+
+/* Rx content area */
+.rx-content-area {
+  position: absolute;
+  top: 38%;
+  left: 26.5%;
+  width: 69%;
+  font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+}
+
+.rx-content-section { margin-bottom: 8px; }
+
+.rx-content-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #1a5c2a;
+  margin-bottom: 2px;
+}
+
+.rx-content-val {
+  font-size: 13px;
+  color: #111;
+  line-height: 1.4;
+}
+
+/* Medicine table */
+.rx-med-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-top: 4px;
+}
+.rx-med-table th {
+  background: #e8f5e9;
+  color: #1a5c2a;
+  font-weight: 700;
+  padding: 3px 5px;
+  border: 1px solid #c8e6c8;
+  text-align: left;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+.rx-med-table td {
+  padding: 3px 5px;
+  border: 1px solid #e8e8e8;
+  font-size: 11px;
+}
+.rx-med-table tr:nth-child(even) td { background: #f9fdf9; }
+.rx-tick { text-align: center; color: #1a5c2a; font-weight: 700; }
+
+.rx-fee-line {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a5c2a;
+}
+
+/* Actions */
+.prescription-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 10px 16px;
+  background: #f5f5f5;
+  border-top: 1px solid #e0e0e0;
+  position: relative;
+  z-index: 10;
+}
+
+/* PRINT */
+@media print {
+  /* Hide everything except prescription */
+  body > *:not(dialog) { display: none !important; }
+  dialog { 
+    position: fixed !important;
+    top: 0 !important; left: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    display: block !important;
+  }
+  .rx-sheet {
+    width: 210mm !important;
+    height: 297mm !important;
+  }
+  .rx-bg {
+    width: 210mm !important;
+    height: 297mm !important;
+    padding-top: 0 !important;
+    background-size: 210mm 297mm !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .rx-overlay {
+    height: 297mm !important;
+  }
+  .prescription-actions { display: none !important; }
+  .rx-data { font-size: 3.5mm !important; }
+  .rx-content-label { font-size: 2.5mm !important; }
+  .rx-content-val   { font-size: 3.2mm !important; }
+  .rx-med-table { font-size: 2.6mm !important; }
+  .rx-med-table th,
+  .rx-med-table td  { font-size: 2.6mm !important; padding: 0.8mm 1mm !important; }
+  .rx-fee-line      { font-size: 3mm !important; }
+  @page { size: A4; margin: 0; }
+}
+
+.rx-blank {
+  display: inline-block;
+  width: 50px;
+  border-bottom: 1px solid #333;
+  vertical-align: bottom;
+}

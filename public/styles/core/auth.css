@@ -1,0 +1,109 @@
+html.auth-pending .app-shell {
+  display: none;
+}
+
+.auth-gate {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #eef4eb, #f8f7f1 55%, #ddebdc);
+}
+
+.auth-card {
+  width: min(430px, 100%);
+  background: #fff;
+  padding: 38px;
+  border-radius: 14px;
+  box-shadow: 0 18px 55px #1e4b3930;
+  text-align: center;
+}
+
+.auth-logo {
+  width: 86px;
+  height: 86px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #aac2a8;
+  margin-bottom: 18px;
+}
+
+.auth-card h1 {
+  font-size: 29px;
+  margin: 0 0 8px;
+}
+
+.auth-card>p {
+  color: #718078;
+  line-height: 1.55;
+  margin-bottom: 25px;
+}
+
+.auth-form {
+  display: grid;
+  gap: 15px;
+  text-align: left;
+}
+
+.auth-form .field {
+  font-size: 12px;
+}
+
+.auth-form button {
+  margin-top: 6px;
+}
+
+.auth-error {
+  display: none;
+  margin: 0;
+  color: #a33d35;
+  background: #fff0ee;
+  border-radius: 6px;
+  padding: 9px 11px;
+  font-size: 12px;
+  text-align: left;
+}
+
+.auth-error.visible {
+  display: block;
+}
+
+.auth-footnote {
+  margin: 20px 0 0 !important;
+  color: #87948d !important;
+  font-size: 11px;
+}
+
+.account-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.doctor-name {
+  color: #526559;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.logout {
+  background: transparent;
+  color: #2c674e;
+  border: 1px solid #cbd8cb;
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+@media (max-width: 800px) {
+  .account-area {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .doctor-name {
+    display: none;
+  }
+}

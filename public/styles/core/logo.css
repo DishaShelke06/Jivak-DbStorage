@@ -1,0 +1,26 @@
+.brand {
+    padding-bottom: 32px;
+}
+
+.brand-logo {
+    width: 74px;
+    height: 74px;
+    object-fit: cover;
+    border: 2px solid #9fb7a0;
+    border-radius: 50%;
+    background: #fff;
+    flex-shrink: 0;
+    transition: transform .35s ease, box-shadow .35s ease;
+}
+
+.brand:hover .brand-logo {
+    transform: rotate(-6deg) scale(1.06);
+    box-shadow: 0 4px 14px #00000030;
+}
+
+@media (max-width: 800px) {
+    .brand-logo {
+        width: 52px;
+        height: 52px;
+    }
+}

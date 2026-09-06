@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>जीवक चिकित्सालय</title>
+  <link rel="icon" type="image/png" href="assets/jivak-logo.png" />
+  <link rel="apple-touch-icon" href="assets/jivak-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/core/base.css" />
+  <link rel="stylesheet" href="styles/core/logo.css" />
+  <link rel="stylesheet" href="styles/core/auth.css" />
+  <link rel="stylesheet" href="styles/pages/visits/visits.css?v=4" />
+  <link rel="stylesheet" href="styles/pages/patients/profile.css" />
+  <link rel="stylesheet" href="styles/pages/inventory/inventory.css" />
+  <link rel="stylesheet" href="styles/shared/modules.css" />
+  <link rel="stylesheet" href="styles/core/polish.css" />
+  <link rel="stylesheet" href="styles/shared/interactions.css?v=2" />
+  <link rel="stylesheet" href="styles/pages/panchakarma/panchakarma.css" />
+  <link rel="stylesheet" href="styles/pages/suvarnaprashan/suvarnaprashan.css" />
+</head>
+
+<body>
+<div class="app-shell">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <a class="brand" href="#" aria-label="Jivak Chikitsalay home">
+      <img class="brand-logo" src="assets/jivak-logo.png" alt="Jivak Chikitsalay logo" />
+      <span class="brand-text">
+        <strong>जीवक चिकित्सालय</strong>
+        <small>(पंचकर्मासह संपूर्ण आयुर्वेदीय उपचार)</small>
+      </span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a class="nav-item" data-view="dashboard"       href="#dashboard">     <span>🏠</span> Dashboard</a>
+      <a class="nav-item active" data-view="patients" href="#patients">    <span>👥</span> Patients</a>
+      <a class="nav-item" data-view="visits"          href="#visits">      <span>📋</span> Visits</a>
+      <a class="nav-item" data-view="inventory"       href="#inventory">   <span>💊</span> Medicine inventory</a>
+      <a class="nav-item" data-view="followups"       href="#followups">   <span>🔔</span> Follow-ups</a>
+      <a class="nav-item" data-view="finance"         href="#finance">     <span>💰</span> Finance</a>
+      <a class="nav-item" data-view="suvarnaprashan"  href="#suvarnaprashan"><span>🌿</span> सुवर्णप्राशन</a>
+      <a class="nav-item" data-view="panchakarma"     href="#panchakarma"> <span>🧘</span> पंचकर्म</a>
+    </nav>
+    <div class="sidebar-foot"><span class="lock">⌑</span> Made with ❤️ by Disha</div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow" id="pageEyebrow"></p>
+        <h1 id="pageTitle">Patient management</h1>
+      </div>
+      <div class="account-area">
+        <div class="date"><span>◷</span><span id="today"></span></div>
+        <span class="doctor-name" id="doctorName"></span>
+        <button class="logout" id="logoutBtn" type="button">Log out</button>
+      </div>
+    </header>
+
+    <!-- ══ PATIENTS ══ -->
+    <div id="patientsView">
+      <section class="toolbar" id="patients">
+        <label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search by patient name or phone number" autocomplete="off" /></label>
+        <select id="genderFilter" aria-label="Filter patients by gender">
+          <option value="">All patients</option>
+          <option>Female</option><option>Male</option><option>Other</option>
+        </select>
+        <button class="primary" id="addPatientBtn"><span>＋</span> Add new patient</button>
+      </section>
+      <section class="summary" aria-label="Patient summary">
+        <div><span id="patientCount">0</span><p>Total patients</p></div>
+        <div><span id="newThisMonth">0</span><p>Added this month</p></div>
+        <div><span id="recentCount">0</span><p>Recently updated</p></div>
+      </section>
+      <section class="patient-section">
+        <div class="section-heading">
+          <div><h2>Your patients</h2><p id="resultsText">No patients have been added yet.</p></div>
+          <button class="text-button" id="clearFiltersBtn" hidden>Clear filters</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Patient</th><th>Contact</th><th>Age / Gender</th><th>Blood group</th><th>Last updated</th><th><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="patientTableBody"></tbody>
+          </table>
+          <div class="empty-state" id="emptyState">
+            <div class="empty-icon">♡</div>
+            <h3>Start your digital patient register</h3>
+            <p>Add your first patient to securely keep their details and history in one place.</p>
+            <button class="primary" id="emptyAddBtn">Add first patient</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ══ DASHBOARD ══ -->
+    <section class="dashboard-view" id="dashboardView" hidden>
+      <div class="dashboard-welcome">
+        <div class="dashboard-title">
+          <img class="dashboard-logo" src="assets/jivak-logo.png" alt="Jivak Chikitsalay logo">
+          <div>
+            <p class="eyebrow">Clinic overview</p>
+            <h2 id="dashboardGreeting">Good day, Doctor</h2>
+            <p>Here is what needs your attention today.</p>
+          </div>
+        </div>
+        <button class="primary" id="dashboardAddVisit">＋ Record new visit</button>
+      </div>
+      <div class="dashboard-cards">
+        <article><span class="dash-icon">⌁</span><div><strong id="dashPatients">0</strong><p>Total patients</p></div></article>
+        <article><span class="dash-icon">▤</span><div><strong id="dashTodayVisits">0</strong><p>Visits today</p></div></article>
+        <article><span class="dash-icon alert">◴</span><div><strong id="dashFollowups">0</strong><p>Follow-ups due</p></div></article>
+        <article><span class="dash-icon gold">₹</span><div><strong id="dashTodayIncome">₹0</strong><p>Income today</p></div></article>
+      </div>
+      <div class="dashboard-grid">
+        <section class="dashboard-panel">
+          <div class="panel-heading">
+            <div><h3>Upcoming follow-ups</h3><p>Patients requiring attention</p></div>
+            <button class="link-button" data-view="followups">View all</button>
+          </div>
+          <div id="dashboardFollowupList" class="compact-list"></div>
+        </section>
+        <section class="dashboard-panel">
+          <div class="panel-heading">
+            <div><h3>Inventory alerts</h3><p>Low stock and expiry checks</p></div>
+            <button class="link-button" data-view="inventory">View inventory</button>
+          </div>
+          <div id="dashboardInventoryList" class="compact-list"></div>
+        </section>
+      </div>
+      <section class="backup-panel">
+        <div>
+          <p class="eyebrow">Data protection</p>
+          <h3>Back up your clinic records</h3>
+          <p>Export all clinic data to a private backup file. Keep it safely on an external drive or secure cloud folder.</p>
+        </div>
+        <div class="backup-actions">
+          <button class="secondary" id="importBackupBtn">Restore backup</button>
+          <button class="secondary" id="importExcelBackupBtn">Restore Excel backup</button>
+          <button class="secondary" id="exportExcelBackupBtn">Download Excel</button>
+          <button class="primary" id="exportBackupBtn">Download JSON</button>
+          <input id="backupFile" type="file" accept="application/json" hidden>
+          <input id="backupExcelFile" type="file" accept=".xls" hidden>
+        </div>
+      </section>
+      <section class="backup-panel danger-zone">
+        <div>
+          <p class="eyebrow">Danger zone</p>
+          <h3>Reset all clinic data</h3>
+          <p>Permanently deletes every patient, visit, prescription, finance entry, follow-up, सुवर्णप्राशन and Panchakarma record. This cannot be undone — download a backup first.</p>
+        </div>
+        <div class="backup-actions">
+          <button class="link-button danger" id="resetAllDataBtn">Reset all data…</button>
+        </div>
+      </section>
+    </section>
+
+    <!-- ══ VISITS ══ -->
+    <section class="visits-view" id="visitsView" hidden>
+      <div class="visit-overview">
+        <div><p>Record consultations and keep each patient's treatment history together.</p></div>
+        <button class="primary" id="addVisitBtn"><span>＋</span> Record new visit</button>
+      </div>
+      <section class="summary visit-summary" aria-label="Visit summary">
+        <div><span id="visitCount">0</span><p>Total visits</p></div>
+        <div><span id="visitMonthCount">0</span><p>Visits this month</p></div>
+        <div><span id="feeThisMonth">₹0</span><p>Fees collected this month</p></div>
+      </section>
+      <section class="patient-section">
+        <div class="section-heading">
+          <div><h2>Consultation history</h2><p id="visitResultsText">No visits have been recorded yet.</p></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Date</th><th>Patient</th><th>Complaints / diagnosis</th><th>Consultation fee</th><th><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="visitTableBody"></tbody>
+          </table>
+          <div class="empty-state" id="visitEmptyState">
+            <div class="empty-icon">✦</div>
+            <h3>Record the first consultation</h3>
+            <p>Select a patient and capture their symptoms, diagnosis, treatment, and consultation fee.</p>
+            <button class="primary" id="emptyAddVisitBtn">Record first visit</button>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ══ INVENTORY ══ -->
+    <section class="inventory-view" id="inventoryView" hidden>
+      <div class="visit-overview">
+        <div><p>Keep stock, pricing, expiry dates, and reordering needs under control.</p></div>
+        <button class="primary" id="addMedicineInventoryBtn"><span>＋</span> Add medicine</button>
+      </div>
+      <section class="summary inventory-summary">
+        <div><span id="medicineCount">0</span><p>Medicines tracked</p></div>
+        <div><span id="lowStockCount">0</span><p>Low-stock alerts</p></div>
+        <div><span id="expiryCount">0</span><p>Expiring within 30 days</p></div>
+      </section>
+      <div class="inventory-alerts" id="inventoryAlerts"></div>
+      <section class="toolbar inventory-toolbar">
+        <label class="search"><span>⌕</span><input id="medicineSearch" type="search" placeholder="Search by medicine, brand, or category" autocomplete="off" /></label>
+        <select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option></select>
+      </section>
+      <section class="patient-section">
+        <div class="section-heading">
+          <div><h2>Medicine stock</h2><p id="medicineResultsText">No medicines have been added yet.</p></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Medicine</th><th>Category</th><th>In stock</th><th>Expiry</th><th>Purchase / selling price</th><th><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="medicineTableBody"></tbody>
+          </table>
+          <div class="empty-state" id="medicineEmptyState">
+            <div class="empty-icon">✚</div>
+            <h3>Build your medicine inventory</h3>
+            <p>Add the medicines currently available in your clinic to enable stock alerts and automatic deduction.</p>
+            <button class="primary" id="emptyAddMedicineBtn">Add first medicine</button>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ══ FOLLOW-UPS ══ -->
+    <section class="followups-view" id="followupsView" hidden>
+      <div class="visit-overview">
+        <div><p>Choose which consultations need a reminder, then send a personal follow-up when it is due.</p></div>
+      </div>
+      <section class="summary followup-summary">
+        <div><span id="followupDueCount">0</span><p>Due now</p></div>
+        <div><span id="followupUpcomingCount">0</span><p>Upcoming</p></div>
+        <div><span id="followupCompletedCount">0</span><p>Completed</p></div>
+      </section>
+      <section class="patient-section">
+        <div class="section-heading">
+          <div><h2>Follow-up schedule</h2><p id="followupResultsText">Enable a reminder from any recorded consultation.</p></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Patient</th><th>Last visit</th><th>Reminder date</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="followupTableBody"></tbody>
+          </table>
+          <div class="empty-state" id="followupEmptyState">
+            <div class="empty-icon">◴</div>
+            <h3>No follow-ups planned</h3>
+            <p>Choose a past consultation below to schedule a patient reminder.</p>
+          </div>
+        </div>
+      </section>
+      <section class="patient-section past-visits-section">
+        <div class="section-heading">
+          <div><h2>Consultations without a reminder</h2><p>Select only the visits where follow-up care is needed.</p></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Patient</th><th>Visit date</th><th>Diagnosis</th><th><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="unscheduledVisitBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- ══ FINANCE ══ -->
+    <section id="financeView" hidden>
+      <div class="visit-overview">
+        <div><p>A clear view of consultation income, medicine sales, expenses, and clinic profit.</p></div>
+        <div class="finance-buttons">
+          <button class="secondary" id="exportFinanceBtn">Export Excel CSV</button>
+          <button class="secondary" id="recordSaleBtn">Record medicine sale</button>
+          <button class="primary" id="addTransactionBtn">＋ Add transaction</button>
+        </div>
+      </div>
+      <section class="summary finance-summary">
+        <div><span id="financeIncome">₹0</span><p>Income this month</p></div>
+        <div><span id="financeExpense">₹0</span><p>Expenses this month</p></div>
+        <div><span id="financeProfit">₹0</span><p>Net profit this month</p></div>
+      </section>
+      <!-- Income breakdown panel -->
+      <div class="income-breakdown" id="incomeBreakdown">
+        <div class="breakdown-header">
+          <div class="breakdown-tabs">
+            <button class="breakdown-tab active" data-period="daily">Today</button>
+            <button class="breakdown-tab" data-period="monthly">Monthly</button>
+            <button class="breakdown-tab" data-period="yearly">Yearly</button>
+          </div>
+          <div id="breakdownControls" style="display:flex;gap:8px;align-items:center"></div>
+        </div>
+        <div id="breakdownContent"></div>
+      </div>
+
+      <div class="finance-tabs">
+        <button class="finance-tab active" data-finance-type="all">All entries</button>
+        <button class="finance-tab" data-finance-type="income">Income</button>
+        <button class="finance-tab" data-finance-type="expense">Expenses</button>
+      </div>
+      <section class="patient-section">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Category</th><th>Amount</th><th><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="financeTableBody"></tbody>
+          </table>
+          <div class="empty-state" id="financeEmptyState">
+            <div class="empty-icon">₹</div>
+            <h3>Finance tracking starts here</h3>
+            <p>Consultation fees are recorded automatically; add other income and expenses as they occur.</p>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ══ SUVARNAPRASHAN ══ -->
+    <section id="suvarnaprashanView" hidden>
+      <div class="visit-overview">
+        <div><p>Each child is registered once and keeps their own history of monthly doses — no duplicate entries.</p></div>
+        <div class="finance-buttons">
+          <button class="secondary" id="spExportBtn">Export CSV</button>
+          <button class="secondary" id="spBulkDayBtn">🗓️ Record Clinic Day</button>
+          <button class="primary" id="spAddBtn">＋ Register Child</button>
+        </div>
+      </div>
+      <section class="summary finance-summary">
+        <div><span id="spTotalChildren">0</span><p>Registered children</p></div>
+        <div><span id="spActiveChildren">0</span><p>Active</p></div>
+        <div><span id="spThisMonth">0</span><p>Doses this month</p></div>
+        <div><span id="spMonthIncome">₹0</span><p>Income this month</p></div>
+      </section>
+      <div class="finance-tabs">
+        <input id="spSearch" type="search" placeholder="Search by child or parent name / phone…" />
+        <select id="spStatusFilter">
+          <option value="">All children</option>
+          <option value="active">Active</option>
+          <option value="completed">Completed (5-6 yrs)</option>
+        </select>
+      </div>
+      <section class="patient-section">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Child Name</th><th>Age</th><th>Parent Name</th><th>Phone</th><th>Doses</th><th>Last Dose</th><th>Total Paid</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="spTableBody"></tbody>
+          </table>
+          <div class="empty-state" id="spEmptyState" hidden>
+            <div class="empty-icon">🌿</div>
+            <h3>No children registered yet</h3>
+            <p>Register the first child to start tracking their सुवर्णप्राशन doses.</p>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ══ PANCHAKARMA ══ -->
+    <section id="panchakarmaView" hidden>
+
+      <!-- List view -->
+      <div id="pkListView">
+        <div class="visit-overview">
+          <div><p>Track Panchakarma courses — day by day therapy, notes and payments.</p></div>
+          <div class="finance-buttons">
+            <button class="secondary" id="pkExportBtn">Export CSV</button>
+            <button class="primary" id="pkAddBtn">＋ New Course</button>
+          </div>
+        </div>
+        <section class="summary finance-summary">
+          <div><span id="pkActiveCount">0</span><p>Active courses</p></div>
+          <div><span id="pkTodayCount">0</span><p>Sessions today</p></div>
+          <div><span id="pkTotalIncome">₹0</span><p>Total collected</p></div>
+        </section>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px">
+          <input id="pkSearch" placeholder="Search by name or phone..." style="flex:1;padding:8px 14px;border:1.5px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit" />
+          <select id="pkStatusFilter" style="padding:8px 14px;border:1.5px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit;background:var(--white);color:var(--ink);cursor:pointer">
+            <option value="">All courses</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+            <option value="paused">Paused</option>
+          </select>
+        </div>
+        <section class="patient-section">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Patient</th><th>Therapies</th><th>Start Date</th><th>Progress</th><th>Paid</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead>
+              <tbody id="pkTableBody"></tbody>
+            </table>
+            <div class="empty-state" id="pkEmptyState" hidden>
+              <div class="empty-icon">🧘</div>
+              <h3>No Panchakarma courses yet</h3>
+              <p>Start a new course to begin tracking.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Course day-tracking view -->
+      <div id="pkCourseView" hidden>
+        <div class="pk-course-header">
+          <div>
+            <p class="eyebrow">Panchakarma Course</p>
+            <h2 id="pkCourseTitle"></h2>
+            <p id="pkCourseTherapies" style="color:var(--brand);font-weight:600;margin-bottom:2px"></p>
+            <p id="pkCourseMeta"></p>
+          </div>
+          <div class="pk-course-actions">
+            <button class="secondary" id="pkCourseStatusBtn">Mark as Completed</button>
+            <button class="secondary" id="pkBackBtn">← Back to list</button>
+          </div>
+        </div>
+        <!-- Add day form -->
+        <div class="pk-add-day-form">
+          <h3>➕ Record a Day</h3>
+          <form id="pkDayForm" novalidate>
+            <div class="pk-form-row">
+              <label class="field">Day No.<input id="pkDayNumber" type="number" min="1" required placeholder="1" /></label>
+              <label class="field">Date<input id="pkDayDate" type="date" required /></label>
+              <label class="field">Therapy done<select id="pkDayTherapy"></select></label>
+              <label class="field">Payment (₹)<input id="pkDayPayment" type="number" min="0" placeholder="0" /></label>
+            </div>
+            <div style="margin-bottom:10px">
+              <label class="field">Notes / Observations<input id="pkDayNotes" placeholder="Patient response, observations..." /></label>
+            </div>
+            <div style="text-align:right">
+              <button class="primary" type="submit">Save Day</button>
+            </div>
+          </form>
+        </div>
+        <!-- Therapy breakdown summary -->
+        <div id="pkTherapySummary" style="margin-top:20px"></div>
+
+        <!-- Day records -->
+        <section class="patient-section" style="margin-top:20px">
+          <h3 style="font-size:15px;font-weight:700;color:var(--ink);margin-bottom:12px">Day Records</h3>
+          <div id="pkDayList"></div>
+        </section>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<!-- ══ DIALOGS ══ -->
+
+<!-- Suvarnaprashan: register / edit a child's profile (one-time, not per visit) -->
+<dialog id="spDialog" class="sp-form-dialog">
+  <form id="spForm" novalidate>
+    <div class="modal-head">
+      <div><h2>सुवर्णप्राशन</h2><p id="spFormTitle" class="sp-detail-child-name">Register Child</p></div>
+      <button class="icon-button" type="button" id="spCloseDialog" aria-label="Close">×</button>
+    </div>
+    <input type="hidden" id="spRecordId" />
+    <div class="form-grid">
+      <label class="field">Child's Full Name <span>*</span><input id="spChildName" required maxlength="80" placeholder="Child's full name" /></label>
+      <label class="field">Date of Birth<input id="spDob" type="date" /></label>
+      <label class="field">Age (if DOB unknown)<input id="spChildAge" type="number" min="0" max="16" placeholder="e.g. 2" /></label>
+      <label class="field">Parent's Name <span>*</span><input id="spParentName" required maxlength="80" placeholder="Father's / Mother's name" /></label>
+      <label class="field">Phone Number <span>*</span><input id="spPhone" type="tel" required maxlength="20" placeholder="e.g. 98765 43210" /></label>
+      <label class="field" id="spStatusField" hidden>Status
+        <select id="spStatus"><option value="active">Active</option><option value="completed">Completed (5-6 yrs)</option></select>
+      </label>
+    </div>
+    <div class="form-grid" id="spFirstDoseFields">
+      <label class="field">First Dose Date<input id="spFirstDoseDate" type="date" /></label>
+      <label class="field">Amount Paid (₹)<input id="spFirstDoseAmount" type="number" min="0" placeholder="e.g. 500" /></label>
+    </div>
+    <div class="modal-actions">
+      <button class="secondary" type="button" id="spCancelDialog">Cancel</button>
+      <button class="primary" type="submit" id="spSaveBtn">Register child</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Suvarnaprashan: single child's dose history + add a dose -->
+<dialog id="spDetailDialog" class="sp-detail-dialog">
+  <div class="modal-head">
+    <div><h2>सुवर्णप्राशन</h2><p id="spDetailTitle" class="sp-detail-child-name">Child</p></div>
+    <button class="icon-button" type="button" id="spDetailClose" aria-label="Close">×</button>
+  </div>
+  <p id="spDetailMeta" class="sp-detail-meta"></p>
+  <form id="spDoseForm" class="sp-dose-form" novalidate>
+    <input type="hidden" id="spDoseChildId" />
+    <label class="field">Dose Date <span>*</span><input id="spDoseDate" type="date" required /></label>
+    <label class="field">Amount (₹)<input id="spDoseAmount" type="number" min="0" placeholder="e.g. 500" /></label>
+    <button class="primary" type="submit">＋ Add Dose</button>
+  </form>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Date</th><th>Amount</th><th><span class="sr-only">Actions</span></th></tr></thead>
+      <tbody id="spDoseTableBody"></tbody>
+    </table>
+  </div>
+  <div class="modal-actions sp-detail-actions">
+    <button class="link-button danger" type="button" id="spDetailDeleteChild">Delete Child</button>
+    <button class="secondary" type="button" id="spDetailEditChild">Edit Child Details</button>
+  </div>
+</dialog>
+
+<!-- Suvarnaprashan: record the clinic's one monthly Suvarnaprashan day for several children at once -->
+<dialog id="spBulkDialog">
+  <form id="spBulkForm" novalidate>
+    <div class="modal-head">
+      <div><p class="eyebrow">सुवर्णप्राशन</p><h2>Record Clinic Day</h2></div>
+      <button class="icon-button" type="button" id="spBulkClose" aria-label="Close">×</button>
+    </div>
+    <label class="field">Clinic Day <span>*</span><input id="spBulkDate" type="date" required /></label>
+    <input id="spBulkSearch" type="search" placeholder="Search registered children to tick off…" />
+    <div id="spBulkList"></div>
+    <div class="modal-actions">
+      <button class="secondary" type="button" id="spBulkCancel">Cancel</button>
+      <button class="primary" type="submit">Save doses for the day</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Panchakarma Course -->
+<dialog id="pkDialog">
+  <form id="pkCourseForm" novalidate>
+    <div class="modal-head">
+      <div><p class="eyebrow">पंचकर्म</p><h2 id="pkFormTitle">New Panchakarma Course</h2></div>
+      <button class="icon-button" type="button" id="pkCloseDialog" aria-label="Close">×</button>
+    </div>
+    <input type="hidden" id="pkCourseId" />
+    <input type="hidden" id="pkLinkedPatientId" />
+    <div class="form-grid">
+      <label class="field" style="position:relative">Patient Name <span>*</span>
+        <input id="pkPatientName" required maxlength="80" placeholder="Type to search existing patients..." autocomplete="off" />
+        <div id="pkPatientDropdown"></div>
+      </label>
+      <label class="field">Phone Number <span>*</span><input id="pkPatientPhone" required maxlength="20" placeholder="e.g. 98765 43210" /></label>
+      <label class="field">Start Date <span>*</span><input id="pkStartDate" type="date" required /></label>
+      <label class="field">Total Days Planned <span>*</span><input id="pkTotalDays" type="number" min="1" max="60" required placeholder="e.g. 7" /></label>
+      <div class="pk-therapy-section form-full">
+        <label style="font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:8px;display:block">Select Therapies <span>*</span></label>
+        <div id="pkTherapyCheckboxes"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="secondary" type="button" id="pkCancelDialog">Cancel</button>
+      <button class="primary" type="submit" id="pkSaveBtn">Start course</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Patient -->
+<dialog id="patientDialog">
+  <form id="patientForm" novalidate>
+    <div class="modal-head">
+      <div><p class="eyebrow" id="formEyebrow">New patient</p><h2 id="formTitle">Add patient details</h2></div>
+      <button class="icon-button" type="button" id="closeDialog" aria-label="Close">×</button>
+    </div>
+    <input type="hidden" id="patientId" />
+    <div class="form-grid">
+      <label class="field full">Full name <span>*</span><input id="name" required maxlength="80" placeholder="Patient's full name" /></label>
+      <label class="field">Age <span>*</span><input id="age" type="number" min="0" max="130" required placeholder="e.g. 35" /></label>
+      <label class="field">Gender <span>*</span>
+        <select id="gender" required>
+          <option value="" disabled selected>Select gender</option>
+          <option>Female</option><option>Male</option><option>Other</option>
+        </select>
+      </label>
+      <label class="field">Phone number <span>*</span><input id="phone" type="tel" required maxlength="20" placeholder="e.g. 98765 43210" /></label>
+      <label class="field">Blood group
+        <select id="bloodGroup">
+          <option value="">Not recorded</option>
+          <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+          <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+        </select>
+      </label>
+      <label class="field full">Address<textarea id="address" rows="2" maxlength="250" placeholder="Home address (optional)"></textarea></label>
+      <label class="field full">Important medical history<textarea id="medicalHistory" rows="3" maxlength="1000" placeholder="Allergies, ongoing conditions, previous treatments, or other important notes"></textarea></label>
+    </div>
+    <p class="form-note">Fields marked <span>*</span> are required.</p>
+    <div class="modal-actions">
+      <button class="secondary" type="button" id="cancelDialog">Cancel</button>
+      <button class="primary" type="submit" id="savePatientBtn">Save patient</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Profile -->
+<dialog id="profileDialog" class="profile-dialog"><article id="profileContent"></article></dialog>
+
+<!-- Visit -->
+<dialog id="visitDialog" class="visit-dialog">
+  <form id="visitForm" novalidate>
+    <div class="modal-head">
+      <div><p class="eyebrow">New consultation</p><h2>Record patient visit</h2></div>
+      <button class="icon-button" type="button" id="closeVisitDialog" aria-label="Close">×</button>
+    </div>
+    <div class="form-grid visit-form-grid">
+      <label class="field full">Patient <span>*</span><select id="visitPatient" required><option value="" disabled selected>Select a patient</option></select></label>
+      <label class="field">Date of visit <span>*</span><input id="visitDate" type="date" required></label>
+      <label class="field">Consultation fee <span>*</span><input id="visitFee" type="number" min="0" step="0.01" required placeholder="e.g. 500"></label>
+      <!-- Vitals -->
+      <label class="field">BP <input id="visitBP" placeholder="e.g. 120/80" maxlength="20"></label>
+      <label class="field">BSL <input id="visitBSL" placeholder="e.g. 110 mg/dL" maxlength="20"></label>
+      <label class="field">Temperature <input id="visitTemp" placeholder="e.g. 98.6°F" maxlength="20"></label>
+      <label class="field">Weight <input id="visitWeight" placeholder="e.g. 65 kg" maxlength="20"></label>
+      <label class="field full">Complaints / symptoms <span>*</span><textarea id="complaints" rows="2" required maxlength="1200" placeholder="Patient's symptoms and complaints"></textarea></label>
+      <label class="field full">Diagnosis <span>*</span><textarea id="diagnosis" rows="2" required maxlength="1200" placeholder="Clinical diagnosis"></textarea></label>
+    </div>
+    <div class="medicine-block">
+      <div class="medicine-heading">
+        <div><strong>Medicines prescribed</strong><small>Dosage, frequency, and duration</small></div>
+        <button class="secondary small-button" id="addMedicineBtn" type="button">＋ Add medicine</button>
+      </div>
+      <div class="medicine-scroll">
+        <div class="medicine-block-header">
+          <span>Medicine</span>
+          <span>Qty</span>
+          <span>Dosage</span>
+          <span>Duration</span>
+          <span>Meals / When</span>
+          <span>M &nbsp; A &nbsp; E &nbsp; N</span>
+          <span></span>
+        </div>
+        <div id="medicineRows"></div>
+      </div>
+    </div>
+    <label class="field full">Special instructions / notes<textarea id="instructions" rows="3" maxlength="1200" placeholder="Diet advice, precautions, follow-up guidance, or other notes"></textarea></label>
+    <p class="form-note">Fields marked <span>*</span> are required. When an inventory medicine is supplied, its quantity is deducted and its selling price is recorded as income.</p>
+    <div class="modal-actions">
+      <button class="secondary" type="button" id="cancelVisitDialog">Cancel</button>
+      <button class="primary" type="submit">Save visit & prescription</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Prescription -->
+<dialog id="prescriptionDialog" class="prescription-dialog"><article id="prescriptionContent"></article></dialog>
+
+<!-- Medicine -->
+<dialog id="medicineDialog" class="medicine-dialog">
+  <form id="medicineForm" novalidate>
+    <div class="modal-head">
+      <div><p class="eyebrow" id="medicineFormEyebrow">New medicine</p><h2 id="medicineFormTitle">Add medicine to stock</h2></div>
+      <button class="icon-button" id="closeMedicineDialog" type="button" aria-label="Close">×</button>
+    </div>
+    <input id="medicineId" type="hidden">
+    <div class="form-grid">
+      <label class="field">Medicine name <span>*</span><input id="medicineName" required maxlength="100" placeholder="e.g. Paracetamol 500mg"></label>
+      <label class="field">Brand<input id="medicineBrand" maxlength="100" placeholder="Manufacturer / brand"></label>
+      <label class="field">Quantity in stock <span>*</span><input id="medicineQuantity" type="number" min="0" required placeholder="Units or strips"></label>
+      <label class="field">Low-stock level <span>*</span><input id="medicineLowStock" type="number" min="0" required value="10"></label>
+      <label class="field">Expiry date <span>*</span><input id="medicineExpiry" type="date" required></label>
+      <label class="field">Category<input id="medicineCategory" maxlength="60" placeholder="e.g. Painkiller"></label>
+      <label class="field">Purchase price <span>*</span><input id="medicinePurchasePrice" type="number" min="0" step="0.01" required placeholder="Price per unit"></label>
+      <label class="field">Selling price <span>*</span><input id="medicineSellingPrice" type="number" min="0" step="0.01" required placeholder="Price per unit"></label>
+    </div>
+    <p class="form-note">Fields marked <span>*</span> are required. Quantity is deducted when this medicine is prescribed.</p>
+    <div class="modal-actions">
+      <button class="secondary" id="cancelMedicineDialog" type="button">Cancel</button>
+      <button class="primary" type="submit">Save medicine</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Follow-up -->
+<dialog id="followupDialog" class="small-dialog">
+  <form id="followupForm">
+    <div class="modal-head">
+      <div><p class="eyebrow">Follow-up reminder</p><h2>Schedule patient reminder</h2></div>
+      <button class="icon-button" id="closeFollowupDialog" type="button">×</button>
+    </div>
+    <input id="followupVisitId" type="hidden">
+    <label class="field">Reminder date <span>*</span><input id="followupDate" type="date" required></label>
+    <label class="field">Reminder message<textarea id="followupMessage" rows="5" required></textarea></label>
+    <p class="form-note">The message can be copied or opened in WhatsApp when the reminder is due.</p>
+    <div class="modal-actions">
+      <button class="secondary" id="cancelFollowupDialog" type="button">Cancel</button>
+      <button class="primary" type="submit">Save reminder</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Transaction -->
+<dialog id="transactionDialog" class="small-dialog">
+  <form id="transactionForm">
+    <div class="modal-head">
+      <div><p class="eyebrow">Finance entry</p><h2>Add income or expense</h2></div>
+      <button class="icon-button" id="closeTransactionDialog" type="button">×</button>
+    </div>
+    <div class="form-grid">
+      <label class="field">Entry type <span>*</span>
+        <select id="transactionType" required>
+          <option value="expense">Expense</option>
+          <option value="income">Other income</option>
+        </select>
+      </label>
+      <label class="field">Date <span>*</span><input id="transactionDate" type="date" required></label>
+      <label class="field full">Description <span>*</span><input id="transactionDescription" required maxlength="120" placeholder="e.g. Clinic electricity bill"></label>
+      <label class="field">Category<input id="transactionCategory" maxlength="60" placeholder="e.g. Utilities"></label>
+      <label class="field">Amount <span>*</span><input id="transactionAmount" type="number" min="0.01" step="0.01" required placeholder="e.g. 1500"></label>
+    </div>
+    <div class="modal-actions">
+      <button class="secondary" id="cancelTransactionDialog" type="button">Cancel</button>
+      <button class="primary" type="submit">Save entry</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Medicine Sale -->
+<dialog id="saleDialog" class="small-dialog">
+  <form id="saleForm">
+    <div class="modal-head">
+      <div><p class="eyebrow">Medicine sale</p><h2>Record medicine sale</h2></div>
+      <button class="icon-button" id="closeSaleDialog" type="button">×</button>
+    </div>
+    <div class="form-grid">
+      <label class="field full">Medicine <span>*</span>
+        <select id="saleMedicine" required><option value="" disabled selected>Select medicine</option></select>
+      </label>
+      <label class="field">Quantity <span>*</span><input id="saleQuantity" type="number" min="1" required value="1"></label>
+      <label class="field">Sale date <span>*</span><input id="saleDate" type="date" required></label>
+    </div>
+    <p class="form-note" id="saleTotal">Select a medicine to calculate the sale total.</p>
+    <div class="modal-actions">
+      <button class="secondary" id="cancelSaleDialog" type="button">Cancel</button>
+      <button class="primary" type="submit">Record sale</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ══ SCRIPTS ══ -->
+<script src="scripts/core/api-bridge.js"></script>
+<script src="scripts/core/auth.js"></script>
+<script src="scripts/pages/patients/patients.js"></script>
+<script src="scripts/pages/visits/visits.js"></script>
+<script src="scripts/pages/inventory/inventory.js"></script>
+<script src="scripts/pages/followups/followups.js"></script>
+<script src="scripts/pages/finance/finance.js"></script>
+<script src="scripts/pages/finance/finance-sales.js"></script>
+<script src="scripts/pages/dashboard/dashboard.js"></script>
+<script src="scripts/pages/finance/income-breakdown.js"></script>
+<script src="scripts/pages/suvarnaprashan/suvarnaprashan.js"></script>
+<script src="scripts/pages/panchakarma/panchakarma.js"></script>
+<script src="scripts/shared/enhancements.js"></script>
+<script src="scripts/shared/excel-backup.js"></script>
+<script src="scripts/shared/live-updates.js"></script>
+<script src="scripts/shared/inventory-expenses.js"></script>
+<script src="scripts/shared/autocomplete.js"></script>
+
+</body>
+</html>
